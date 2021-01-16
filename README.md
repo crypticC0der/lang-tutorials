@@ -3,6 +3,8 @@
 a repo of small tutorials on various languages i use, but am not as familiar as i want to be<br>
 i am going to do this for langauges as i need to, and i have  anumber of things i intend to add<br>
 
+**note these tutorials are made for my eyes so they have referances to past work, ie my introduction to proper coding through C#, they will probably work well for others but its more fun and a better learnign experiance to write your own**<br>
+
 - cover C++ in depth
 - cover a graphics library for C++, to do simple things such as a spinabble cube and a developing fractal
 - cover javascript
