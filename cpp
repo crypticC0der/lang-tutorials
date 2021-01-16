@@ -120,6 +120,12 @@ operators:
 		~ - bitwise 2s compiment
 		<< - left shift
 		>> - right shift
+	you also have the incremental operators
+		x++ and x--
+		you also have ++x and --x
+		x++ doesnt just add, it also returns x before the calculation
+		++x does the oposite it adds then returns
+		same goes for the --x and x-- signs
 	
 	operators can of course be mixed with = to make em assingment (eg + -> +=)
 
@@ -179,6 +185,14 @@ functions:
 
 	you can pass pointers to directly affect the values, this is the only way you can pass/effect/return arrays using c++
 	or pass by referance meaning you dont need to turn the value into a pointer before passing
+
+	inline:
+		this is a modifier to the function that when the thing is an alias it will replace the call with the body of the function
+		eg 
+		inline int Max(int x ,int y){
+			return (x>y)?x:y;
+		}
+		cout << Max(20,10) <<endl; //this will be read as cout << (20>10)?20:10 << endl;
 
 numbers again:
 	math operations: (you need <cmath> for these)
@@ -342,3 +356,180 @@ structs
 	} Books;
 
 	so you can make objects with "Books book1;"
+
+Classes
+	scopes
+		public - anyone can access
+		private - noone can access other than self (the default)
+		protected - noone can access other than self and child objects
+		bonuses:
+			static - same on all objects, dont need an object to access
+			friend - can use the object that is passed hidden variables and subroutines
+		
+		the who can access table
+		/				public				protected			private
+		same			yes					yes					yes
+		derived			yes					yes					no
+		outside			yes					no					no
+		child-protected	yes(as protected)	yes(as protected)	no
+		child-private	yes(as private)		yes(as private)		no
+		child-public	yes(as public)		yes(as protected)	no
+
+
+	definitions
+		class name{
+			//its reccomended to just declare functions inside the class but define elsewhere
+			public:
+				//have public feilds and functions declared here
+				name(params); //constructor
+				~name() //destructor
+			private:
+				//private functions and feilds
+			protected:
+				//protectied functions and fields
+		};
+
+		eg
+			class Line{
+				public:
+					static int count=0;
+					void setLength(double l);
+					double getLength(void);
+					Line(int l,int c);
+					friend void Draw();
+				private:
+					double len;
+					double color;
+				};
+
+				void Line::setLength(double l){len=l;}
+				double Line::getLength(void){return len;}
+				Line::Line(int l, int c){
+					len = l;
+					color = c;
+				}
+				void Draw(Line lin){ //this isnt part of line or connected to it, it is able to access private values cos its a friend
+					stdout<<"line is"<<lin.len<<"m long and of colour"<<lin.color<<endl;
+				}
+
+	inheritance
+		this is done in the form
+		class X{
+			private:
+				int a;
+				int b;
+		};
+		class Y: scope X{
+			public:
+				int area();
+		};
+		int Y::area(){return a*b;}
+		
+		the general gist is that a child can use things in the perent, simple
+		so if a perent X had a function setA then so would Y
+
+		you can also have as many perents as you want, so if you had class A inheriting from C and B it would be like this
+
+		class A: scope B, scope C{
+			//class stuff
+		};
+
+		you can also overwrite perent subroutines
+			class Square{
+				public:
+					int x;
+					int area(){return x*x;}
+			};
+			class Rectangle:public Square{
+				public:
+					int y;
+					int area(){return x*y;}
+			}
+
+			if you use virtual the perent can then have a template that is easily overrideable, also when vitual it runs the function based off the memory in the object not its type
+			so you could put say a rectange in a shape object and run the area function and insted of returning the value in shapes area function it uses rectangle as it knows to look at the object not the type due to how its labelled as virtual
+
+		a child object can also be cast-ed to a perent version
+
+	overloading
+		this allows you to make new definitions of functions, for different inputs
+		such as having a different print method for different datatypes
+		ie 
+			void prnt(int a){cout<<"int "<<a;};
+			void prnt(char* a){cout <<"str "<<a;};
+			if you called prnt("hey") youd get "str hey"
+			if you called prnt(0) youd get "int 0"
+
+		you can overload operators in such a fashion, using square class as example
+			class Square2: public Square{
+				public:
+					Square2 operator+(const Square2 &s){
+						Square2 r;
+						r.x = this->x + s.x;
+					}
+
+					Square2 operator++(){ //++Square
+						x++;
+						Square2 s;
+						s.x =x;
+						return s;
+					} 
+					Square2 operator++(int){ //Square2++
+						int y = x;
+						x+=1;
+						Square2 s;
+						s.x =y;
+						return s;
+					}
+					
+					Square2 operator-(){//-Square2
+						Square2 s;
+						s.x = -x;
+						return s;
+					}
+			};
+		you can overload anything even [] and () and -> and delete, ANYTHING
+		except these 4 operators "::" ".*" "." "?:"
+		they are sacred
+
+	this in a class method means the pointer to object the method is running within
+	
+polymorphism
+	this is where multiple functions/methods have the same name
+	and they are called based of the scope your currently in, unless virtualisation is in place on the function
+
+abstraction
+	where unneccicary details are hidden this is seen very easily with the usage of public/private/protected scopres
+	this is good as it avoids errors that may crop up, makes coding cleaner and easier and allows evolution of methods and classes without huge effect due to how modular it becomes
+
+encapsulation
+	storing methods and variables in one object that effect eachother and can be hidden from other scopes
+
+interfaces
+	these are empty, basic classes that allow easy creation of bigger classes often referred to as an ABC
+	such as
+		class Shape{
+			public:
+				virtual int getArea()=0;
+				void setWidth(int w){width=w;}
+				void setHeight(int h){height=h;}
+			protected:
+				int width;
+				int height;
+		};
+		class Rectangle: public Shape{
+			public:
+				int getArea(){
+					return width*height;
+				}
+		}
+		class Triangle: public Shape{
+			public:
+				int getArea(){
+					return width*height/2;
+				}
+		}
+		
+
+		in this the shape class is the interface and this makes creating the rectangle and triangle classes very very easy
+
