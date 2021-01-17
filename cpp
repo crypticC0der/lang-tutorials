@@ -318,6 +318,38 @@ I/O
 		cout << value; -> prints value
 		cerr << errormsg<<endl; -> prints error message (unbuffered)
 		clog << logtext<<endl; -> prints log message (buffered)
+	
+	fstream
+		constains 3 classes
+			fstream - filestream for input and output
+			ifstream - filestream for input
+			ofstream - filestream for output
+		
+		and 5 openmodes
+			ios::app - append
+			ios::ate - open move read/write head to end
+			ios::in - input
+			ios::out - output
+			ios::trunc - if opened for output, the old content is overwritten
+
+		to open a file you use
+			fstream outfile
+			outfile.open(filename,openmode)
+
+		you can combine openmodes use the bitwise OR which is |
+
+		position pointers
+			fstream doesnt support this but if and ofstreams do
+			ifstream uses seekg wheras ofstream uses seekp
+			arguments
+				n (long) - number of charicters to move the pointer
+				seekmode - the direction to move the pointer relitive to
+			seekmodes
+				ios::cur - current position
+				ios::beg - beggining of file (default)
+				ios::end - end of file (if used, n is how far away from the end it goes to)
+
+
 
 structs
 	declared with:
@@ -533,3 +565,239 @@ interfaces
 
 		in this the shape class is the interface and this makes creating the rectangle and triangle classes very very easy
 
+error handling
+	try/catch
+		in the form
+		try{
+			//risky code
+		}catch(type e){ //e is is the variable representing the exception
+			//deal with errors
+		}
+
+		if you want it to catch any exception use ... insted of type e
+
+	throw
+		you can throw exceptions with
+		throw ExceptionType;
+
+		or for a custom one
+		throw "This is a exception";
+
+		you can also make custom exception classes if you make a class that inherits from "exception"
+
+memory
+	basics
+		stack - rigid fast memory
+		heap - dynamic memory
+	operators
+		new T - create memory for a object of type T and return its address
+		new T[n] - create array of n objects of type T and return the adress of the value at index 0
+		delete ptr - delete memory for variable pointed to by ptr
+		delete [] ptr - delete memory for array pointed to by ptr 
+			dont add multiple brackets for a more dimentions
+			a 2d array stored at ptr would still be deleted with
+			delete [] ptr
+
+namespaces
+	namespaces allow another form of polymorphism wherin you can have multiple variables/methods of the same name in different scopes
+	you create a namespace with
+		namespace name{
+			//stuff
+		}
+	and say you wanted to call function func, that is in namespace "space" you do
+		space::func();
+		
+		you could also do
+		
+		using namespace space;
+		func();
+
+	the "using namespace" means that all of the namespaces functions and variables will be imported without the need for direct references
+	
+	if you create a namespace but one by that name exists already it will just add the functions and methods to the original namespaces
+	this means namespaces can span over many files
+
+	nesting
+		you can also have namespaces nested
+		so if namespace maths, has namespace trigFuncs
+		and you wanted sin which is in trigFuncs you run it via
+		maths::trigFuncs::sin();
+		
+		if you wanted to import trigFuncs without importing maths, you can do
+		using namespace math::trigFuncs
+
+templates
+	these allow functions/classes to support multiple types
+	for a function to say compare 2 values and return the larger with no respect to type youd do
+		template <typename T>
+		T Max(T a, T b){
+			if (a>b){
+				return a;	
+			}else{
+				return b;
+			}
+		}
+	for say a special array class youd youse
+		template <class T>
+		class Arr{
+			private:
+				T* ptr;
+			public:
+				Arr(int n){
+					ptr = new T[n];
+				}
+
+		};
+
+		so Arr n = new Arr<float>(10); would create a arr with a float array of 10
+
+preprocessors
+	youve been introduced to #define and #include
+	the syntax for that is
+		#define macro-name replacement text
+		macros with paramiters
+			ie for a macro to return the minimum
+			#define MIN(a,b) (((a)<(b)) ? a:b)
+		you also have
+			#if condition - if then compile (doesnt allow variables)
+			#ifdef symbol - if defined then compile
+			#ifndef symbol - if not defined	then compile
+			#endif - ends #if/#ifdef/#ifndef block
+		# and ## operators
+			## concatonates two tokens
+				ie x ## y would be read as xy
+			# converts to string
+				ie #x would br read as "x"
+			these only work on lines started with #
+	compiler macros
+		these given info about the compilation and source code
+		__LINE__ - line number
+		__FILE__ - filename of sourcecode compiled
+		__DATE__ - date string in "month/day/year" when compiled
+		__TIME__ - time string in "hour:min:sec" when the code was compiled
+
+signals
+	the library for this is csignal
+	handling
+		you need to make a signal handler which has return type void and a integer paramater
+			ie
+			void signalHandler(int signum){
+				//handle signal
+				exit(signum); //terminate program
+			}
+
+		to set that up you use signal
+			signal(int signalNumber,void (*func)(int))
+			eg for interrupt
+				signal(SIGINT,signalHandler);
+	raise
+		to raise a signal you use
+		raise(int sigNum);
+		eg
+			raise(SIGINT);
+
+multithreading
+	the multi threading relies on the pthread.h header file imported with #include <pthread.h>""
+	disclaimer
+		pthread is in most POSIX compliant OS-es and this sections examples assumes you are using linux
+	pthread_create(thread,attr,start_routine,arg) - creates thread
+		thread - an identifier that will be returned
+		attr - specifiy atributes or NULL for defaults
+		start_routine - the function that executes once created
+		arg - passed to start_routine, must be casted as a void*
+	pthread_exit(status) - kills thread
+		status - the status i tend to use null
+	
+	passing arguments, this isnt awful but to do it you have to cast the args to a void pointer
+	then for usage you have to cast them back to their original type 
+
+	joining threads is awkward as you need to properly set the attributes for it to work which is never fun
+
+	examples
+		unjoined threads with no arguments
+			#include <iostream>
+			#include <cstdlib>
+			#include <pthread.h>
+
+			using namespace std;
+
+			#define NUM_THREADS 5
+
+			void *PrintHello(void *threadid) {
+			   cout << "Hello World!"  << endl;
+			   pthread_exit(NULL);
+			}
+
+			int main () {
+			   pthread_t threads[NUM_THREADS];
+			   int rc;
+			   int i;
+			   
+			   for( i = 0; i < NUM_THREADS; i++ ) {
+				  cout << "main() : creating thread, " << i << endl;
+				  rc = pthread_create(&threads[i], NULL, PrintHello, null);
+				  
+				  if (rc) {
+					 cout << "Error:unable to create thread," << rc << endl;
+					 exit(-1);
+				  }
+			   }
+			   pthread_exit(NULL);
+			}
+		joined with arguments
+			#include <iostream>
+			#include <cstdlib>
+			#include <pthread.h>
+			#include <unistd.h>
+
+			using namespace std;
+
+			#define NUM_THREADS 5
+
+			void *wait(void *t) {
+			   int i;
+			   long tid;
+
+			   tid = (long)t;
+
+			   sleep(1);
+			   cout << "Sleeping in thread " << endl;
+			   cout << "Thread with id : " << tid << "  ...exiting " << endl;
+			   pthread_exit(NULL);
+			}
+
+			int main () {
+			   int rc;
+			   int i;
+			   pthread_t threads[NUM_THREADS];
+			   pthread_attr_t attr;
+			   void *status;
+
+			   // Initialize and set thread joinable
+			   pthread_attr_init(&attr);
+			   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+
+			   for( i = 0; i < NUM_THREADS; i++ ) {
+				  cout << "main() : creating thread, " << i << endl;
+				  rc = pthread_create(&threads[i], &attr, wait, (void *)i );
+				  if (rc) {
+					 cout << "Error:unable to create thread," << rc << endl;
+					 exit(-1);
+				  }
+			   }
+
+			   // free attribute and wait for the other threads
+			   pthread_attr_destroy(&attr);
+			   for( i = 0; i < NUM_THREADS; i++ ) {
+				  rc = pthread_join(threads[i], &status);
+				  if (rc) {
+					 cout << "Error:unable to join," << rc << endl;
+					 exit(-1);
+				  }
+				  cout << "Main: completed thread id :" << i ;
+				  cout << "  exiting with status :" << status << endl;
+			   }
+
+			   cout << "Main: program exiting." << endl;
+			   pthread_exit(NULL);
+			}
