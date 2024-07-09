@@ -1,0 +1,565 @@
+ok heres my guide to rust
+this is explained in a way that i should be able to understand and refer to easily
+
+rust is like if python was c++, but in reality its only similar to those languages in syntax
+i dont know javascript but from what i know its similar to rust
+
+RUST IS NOT OBJECT ORIENTATED NO OBJECTS EXIST IN IT
+STRUCTURES AND ENUMS EXIST BUT THEY ARE NOT OBJECTS
+
+rustc is the compiler
+cargo is like pip and an enviroment handler
+
+to make a new library its
+cargo new <library_name> --lib
+
+for a new program its
+cargo new <name>
+
+a macro is denoted with a ! at the end
+such as println!("hello")
+or print!("hello")
+
+all lines end in a ; because thats how it is
+also comments are like c++
+so //comment
+or
+/*
+long
+comment
+*/
+
+to format you litterally just do
+
+println!("{0} {1} {2}",1,2,3);
+will output "1 2 3"
+
+variables are declared with let
+let x=value;
+
+variables are immutable by default (mutable means changable) so this would throw a error
+let x =5;
+x=7;
+to make them mutable and mut after let:
+let mut x = 5;
+x=7;
+this would run fine
+
+consts exist too, with the keyword const insted of let so
+const CONST_VAR:i8 =6;
+
+they can be given a type
+let x:i32=integer;
+
+integer and unsigned integer overflow isnt stopped and works how you think it would
+also for large values _ works to make em easier to read so 128_000_000 = 128000000
+
+you have a few types
+	integer (i8 i16 i32 i64 i128) the 8 or 16 or whatever being the number of bits
+	unsigned integer (u8 u16 u32 u64 u128) same as above
+	float (f32 f64) again same as above
+	bool
+	char, is unicode and has two ranges 0000-D7FF or E000-10FFFF
+	string literal (unchangable) declared with let s:&str="hey";
+	String an object interpretation of strings, covered on line 70
+
+there is no automatic casting so
+let x:i32 = 10;
+let mut y:f32;
+y = x;
+
+will throw an error when compiled
+
+strings are awkward, you can have the literal or a typed implementation
+
+let empty = String::new(); (creates a new empty string)
+let strng = String::from("this is a string") (creates the string object representing"this is a string")
+
+<string_obejct>.len is how you get the length ie strng.len();
+
+string methods youll use often are
+	new() -> new string
+	to_string() -> converts to the string object/printable string
+	replace(pattern,replace) -> easy
+	as_str() -> converts a string obejct to a string literal
+	push(char) -> pushes char to the end of the string
+	push_str(str) -> push string literal to end of string object
+	len() -> obvious
+	trim() -> removes leading and trailing spaces
+	split_whitespace() -> returns array of string that is split by its whitespace so "hey im mj" => ("hey", "im", "mj")
+	split(char) -> same as split_whitespace, but by a specified charicter
+	chars() -> returns a array of chars
+
++ -> combines two strings "hey" + " yo" = "hey yo"
+
+formatting works with the macro like it does in print, so
+let x = format!("{0} {1}","hey","ya");
+println!("{}",x);
+this prints "hey ya"
+
+
+
+operators
+	arethmatic (+ - * / %)
+	rational (> < >= <= == !=)
+	logical (&& || !)
+	bitwise (& | ^ ! << >>), the only thing i may have forgot is ^, which is bitwise xor
+
+if statements are done like
+if boolean{
+	//do thing;
+}else if boolean{
+	//do thing
+}else {
+	//do thing
+}
+
+match statements are basically switch statements so this code will say if y is prime (bad code, but here as an example)
+let y = 7;
+let x = match y{
+	1 => false,
+	2 => true,
+	3 => true,
+	4 => false,
+	5 => true,
+	6 => false,
+	7 => true,
+	8 => false,
+	9 => false,
+	10 => false,
+	_ => {println("value in y not recognised");false}
+};
+print(x);
+the _ means it isnt recognised, you can also have code that doesnt just give an output like in the _ result;
+
+iteration
+
+for x in 0..10{//do thing} does thing for x = 0-9
+for x in list{//do thing} does thing for x in list
+while condition{//do thing} does thing until condition is false
+loop {//do thing} does thing until loop is broken (basically a while true)
+
+functions
+
+fn name(){//do things} does things, has no inputs
+fn name(val1,val2,valN){//does things}, does things, has inputs
+fn name(val1:type ,val2:type, val3:type){//do things}, does things, has typed inputs
+fn name() -> returnType{
+	//does things
+	if condition{return 6;}
+	5 //returns 5
+}
+(does things returns 5 or 6 if condition is true, will return whatever is the result of an expression without a semicolon,
+this must only be done at the end or it will assume the next line is part of the expression)
+fn name(val1:type, val2:type)->type{//does things; return 5;} (does things with inputs and outputs 5)
+
+paramiters are passed by value, if you want to pass with referance do somthing like
+
+fn name(param:&mut i32){*param = 0;} //turn value to 0
+let mut val:i32 = 10;
+name(&mut val);
+//val will now be 0
+
+passing string to functions is simple such as
+
+fn name(param:String){//do thing with string} (this uses the sting object not the literal)
+
+tuples are like arrays, as they cant grow or shrink but they can have multiple types
+such as 
+let tuple:(i32,f64,u8) = (-325,4.9,22);
+
+they are accessed with tuple.0 for the first item, and tuple.1 for the second and so on
+printing tuples is done with:
+	println!("{:?}",tuple)
+
+tuples can be passed as paramiters and returned, theyre pretty useful
+
+you can unpack tuples like such
+let (age,gender,name) = x; //where x is a tuple of three
+this can be used to declare multiple variables at one
+let (x,y,z) = (2,3,5);
+
+arrays are cool as shit
+theyre declared in a few ways
+	let arr = [1,2,3]; //creates array of alues 1,2,3
+	let arr:[i32;3] = [1,2,3]; //creates array of values 1,2,3 with type
+	let arr:[i32;9] = [6;9]; //creates array with very value being 6 and is nine long of type int32
+
+printed the way you would tuples
+
+indexed with arr[index];
+
+unmutable by default can be made mutable with mut
+
+passed how you would, the type array being [type;size]
+
+arrays must also have a length defined at runtime, so no variable lengths
+
+WE ARE NOW GETTING INTO THE HARD STUFF, BE WARNED
+
+
+
+
+memory allocation:
+	im going to run over these quickly, skip to line 237 if you know this well
+	Stack:
+		stores data where size is known at compiile time
+		scalar types and arrays and strings (which are charicter arrays)
+		although if the string is defined in runtime, by say user input, then it goes in the heap
+	
+	Heap:
+		for dynamic memory with unknown sizes, such as a list
+		slower but still cool as shit
+	
+	Ownership:
+		the variable is considered the owner to the value as it points to the memory location that contains said value.
+		ownsership can be transfered when you set a variable to the value of another variable
+		in turn transferring the memory adress to the new variable
+
+	Saftey:
+		two variables cannot own the same value in memory as this can cause issues
+		imagine having two variables point to the same array, pretty useless so rust tells you to stop
+	
+	Functions:
+		ownership changes when passed to functions and this then will get angry at you
+		if you try fuck around with it
+
+		a work around is to return the same array;
+
+		with primative types such as ints the value is simply copied and no pointers are moved
+
+	all this is basically used due to hidden usage of pointers, which basically powers everything
+
+	the work around previously summed up is pretty shit, and sorta shouldnt have to be used, in a good language.
+
+	Borrowing (the workaround but better):
+		bascially the workaround consited of passing a variable to another proccess and giving it back when done
+		this could be considered borrowing and it could be done better
+		this could be done by passing by referance insted, this can also be set to be mutable
+	
+Slicing:
+	a slice is a pointer to a block of memory
+	so "let slice = &arr[3..5];" where arr is [2,3,5,7,11,13,17,19];
+	would have slice being [7,11]
+
+	obviously, use mut to make said slice mutable (changing slice also changes the og array)
+	
+Structures:
+
+	struct name{
+		feild1:type,
+		feild2:type,
+		feild3:type
+	}
+
+	let x = name{p1,p2,p3};
+
+	get feilds of object with x.feild1
+	can be made mutbale with mut after let (as always)
+
+	to add methods you do
+	impl name{ //name must be a struct defined before
+		fn functionname(){ //to use object values have &self as a paramiter, and yea use like self.feild1 to access feild1
+			//things
+		}
+	}
+	static functions arent defined differently but just dont pass &self
+	they can be called with structName::functionName(params);
+
+Enums:
+	these are shit and have few uses other than avoiding remeberinng some numbers
+	an example is
+	enum days{
+		Monday,
+		Tuesday,
+		Wednesday,
+		Thursday,
+		Friday,
+		Saturday,
+		Sunday
+	}
+	let godDay = days::Sunday;
+	println!("{:?}",godDay);
+
+	enums work well with match statements tho ngl
+
+	you can add data for each variant such as this example
+	enum Catagory{
+		Name(String),UsrID(i32)
+	}
+
+	this means an object of this type could contain either a string or an int
+	(probably better to use a struct tho at that point)
+
+	honorable mention Option:
+		this is often returned and can be either None or Some
+		some will have a value wheras none is basically like "this cannot return an output, but sometimes it can"
+
+modules:
+	public or private:
+		if private the functions cannot be accessed in other modules, but can still be accessed in main code
+		if public they can be accessed elsewhere in other modules
+	
+	definiton:
+		(pub if public) mod moduleName{
+			(pub if public) fn thingy(){
+				//do shit
+			}
+		}
+
+	imported with "use moduleName;"
+	when imported used with "thingy();"
+	or when not imported used with "moduleName::thingy();"
+
+Vectors:
+	vectors can change size during runtime
+	all of the same type
+	practically a stack
+	allocated in the heap
+
+	made with either:
+		let mut vectr = Vec::new();
+		let mut vectr = vec![val1,val2,val3];
+
+	commonly used functions:
+		new() -> new empty vector with nothin
+		push(val) -> pushes a value to end of vector
+		remove(index) -> removes value at index
+		contains(val) -> returns true if value in vector
+		len() -> returns length
+
+HashMap:
+	this is rusts implimentation of a dictionary
+	made with:
+		let mut map = HashMap::new();
+	
+	common functions:
+		insert(key,value) -> adds key and value pair to map
+		len() -> number of pairs
+		get(key) -> gets value at key and returns as an Option with Some(value)
+		iter() -> returns iterator of tuples, each tuple is a key value pair (key,value)
+		contains_key(key) -> returns wether or not the key is in the map
+		remove(key) -> removes the key value pair and returns it as a Option with Some(tuple) or None, tuple being (Key,Value)
+
+HashSet:
+	fast at adding removing and finding if values are in the set
+	must all be of the same type
+	made with:
+		let mut set = HashMap::new();
+	
+	common functions:
+		insert(value) -> inserts value to set
+		len() -> returns length
+		get(value) -> returns option with some(value) or None, the value can be used with  &value to get the pointer to the value
+		iter() -> returns iterator for all elements
+		contains(value) -> returns wether or not the map contains the value
+		remove(value) -> removes value from set
+
+HashSet Vec and HashMap are all members of std::collections	
+
+Errors:
+	Panic macro:
+		eg
+		panic!("close program");
+		this should and is used when the program enters a unrecoverable state, such as rying to access an item in an array outside of its boundries
+		the complier warns if it sees this coming
+
+	Recoverable Errors:
+		some things like opening files will return error handling things, like Ok(Type) and Err(msg), Ok will have the output you want if you get it, Err will contain the error message as msg
+		can be used like this:
+
+			fn is_even(no:i32)->Result<bool,String> {
+				if no%2==0 {
+					return Ok(true);
+				} else {
+					return Err("NOT_AN_EVEN".to_string());
+				}
+			}
+
+		you can use .unwrap() to handle errors and panic as needed, and is sort of shorthand for matching to deal with the output
+		unwrap will return the output if it goes well, or throw the error if it happens
+
+		expect() is similar to unwrap() but it will throw a custom error message in case of a panic
+	
+Generic Structures:
+	You should remember these from List<Type> in C#
+	they are collections of values that must be of the same type, but the type can be decided at instantation
+	such as Vec<i32> would be the type of a vector full of 32 bit integers
+
+	these can be made easily with structures
+
+	struct Data<T>{
+		value:T
+	}
+
+	the compiler fills in T later
+
+	Traits:
+		sort of like, well, a trait a thing can be
+		say you have trait Printable declared as such
+
+		trait Printable{
+			fn print(&self){
+				println!("{}",self);
+			};
+		}
+
+		then its overrided and implemented by its implemetation book
+
+		impl Printable for Book{
+			fn print(&self){
+				println!("{} {}",self.id,self.name);
+			}
+		}
+
+		when book.print() is ran it calls its own implementation insted of the traits
+
+	Generic Functions:
+		these will allow a multidue of types that follow certain traits
+		such as:
+
+		fn print_pro<T:Display>(v:T){
+			println!("{}",v);
+		}
+
+		this will print any value passed along to it as logn as it has the display trait, which allows it to be formatted
+
+Input Output:
+	User:
+		there are two traits
+			read (Reader)
+			write (Writer)
+
+		readers have a method readline that is passeds a string by referance and appends the line read to it
+		it will return a io::Result
+
+		to get the stdin you have to go through the std method, then the io method, then the stdin method
+		ie to read a line its
+		let mut line = String::new();
+		let bl = std::io::stdin().read_line(&mut line).unwrap();
+		println!("{}",line);
+		bl is the bytes read, or an error message (an error shouldnt come up tho)
+
+		the write trait has a method write(&bytez) which will write a byte array to the stream
+		although you can use the print! and println! macros you can also write to console with this
+		std::io::stdout().write("this is written to the console\n".as_bytes());
+
+		the command line arguments are stored as an iterator gotten with std::env::args()
+		the first will always be ./<exectuableName>
+		so if you ran ./main true 7
+		it would be ["./main","true","7"]
+
+	Files:
+		
+		this uses the std::fs module
+		methods used often are:
+			module -> method(params) -> description
+			std::fs::File -> open(fname) -> opens file to be read and returns it
+			std::fs::File -> create(path) -> creates/overrides file at path and opens for writing
+			std::fs -> remove_file(path) -> deletes a file
+			std::fs::OpenOptions -> append(true) -> sets the openoptions to be opening for append
+			std::io::Writes -> write_all(byteArray) -> writes bytearray to file
+			std::io::Read -> read_to_string(string) -> appends file contents to string
+			std::io::Read -> read(byteBuffer) -> fills buffer of bytes with char values and returns Option with Some(bytesRead)
+			std::io::Write -> write(bytebuffer) -> writes buffer to file
+
+		appending data to a file example:
+			use std::fs::OpenOptions;
+			use std::io::Write;
+			let mut f = OpenOptions::new().append(true).open("filename").expect("cant open");
+			f.write_all("this will be appended".as_bytes()).expect("couldnt write");
+
+For dealing with cargo, this is a very good resource and will help you if you arent familiar
+	https://www.tutorialspoint.com/rust/rust_package_manager.htm
+
+Iteration:
+	iterables have come up alot but never actually been discussed, this is because i am stupid
+	iterators can easily be dealt with using for loops ie:
+	for x in iter{//do thing}
+
+	or can be dealt with individualy, using next, which will return the next element as Some(Type) or if at the end None
+
+	to get iterables from collections you have 3 methods
+		iter() -> gives an iterator and collection can be used when the iterator is discarded
+		into_iter() -> gives an iterator of a collection and the collection is consumed and not usable ever again
+		iter_mut() -> gives iterator of type &mut T, so the iterator elements can be modified
+
+Lambda functions:
+	these are formally called closure functions and they are functions within functions, that can be assigned to variables insted of given names
+	for this i wil use the example of making a minifunction to square a number
+	definition:
+		let sq = |x:i32|{
+			//do things
+			x*x
+			//or return x*x;
+		};
+
+	usage:
+		let y = sq(7); //y will be 49
+
+as a sidenote functions can be set to variables
+such as with the same example
+fn square(x:i32)->i32{x*x}
+
+let sq = square; //without type declarations
+let sq:fn(i32)->i32 = square; //with type declarations
+
+Smart Pointers:
+	Traits
+	std::ops::Deref -> for dereferancing
+	std::ops::Drop -> Destructor
+
+	boxes allow you to store data on the heap, the stack contains pointers to the heap data
+	to store, say an i32 on the heap its
+	let v = 5;
+	let b = Box::new(v);
+
+	to get the value stored in the pointer/box use *
+
+	to implememt derefencing for a custom Box struct
+
+		use std::ops::Deref;
+		struct MyBox<T>(T);
+		impl<T> MyBox<T>{
+
+			fn new(x:T) -> MyBox<T>
+				MyBox(x) //stores x in feild 0
+			}
+		}
+		impl<T> Deref for MyBox<T>{
+			type Target = T;
+			fn deref(&self) -> &T{
+				&self.0 //returns value set by MyBox(x), which is x
+			}
+		}
+
+	to implement dropping add
+		impl<T> Drop for MyBox<T>{
+			fn drop(&mut self){
+				//do extra thing on deallocation
+			}
+		}
+
+	the box will be deallocated when it is of no use, but you can make it do extra things before it gets murdered
+
+Threading:
+	uses std::thread module and std::time::Duration
+
+	to create a new thread use:
+	thread::spawn(function) this will return a handle which will be used later
+	to get a thread to wait use:
+	thread::sleep(Duration) waits a duration handled by std::time::Duration
+
+	the spawned threads stop whenever the main function/thread stops
+	this can be an issue so you can wait for them using the handle
+	handle.join() will wait for the thread to stop
+	this should be managed with an unwrap so the whole thing would be
+	handle.join().unwrap();
+
+	an example would be
+	fn main(){
+		let f = ||{//do things};
+		let handle = thread::spawn(f);
+		//do other things
+		handle.join().unwrap();
+	}
