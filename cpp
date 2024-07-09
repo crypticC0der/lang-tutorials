@@ -99,12 +99,16 @@ literals:
 	char literals are in the form 'a', remeber '' not "" 
 	string literals are "text"
 
-define and const
+define,typedef and const
 	#define val 5 //this means that when the compiler reads val it will see it as 5, in the same way it reads comments as nothing
 	this works with syntax too, such as
 	#define whilst while //leads to posher code
 
 	constants can be set using arguments and are more flexible, and can be a number of types or custom types
+
+	typedef is used for aliases for types such as
+	tpyedef u8 unsigned char;
+	typedef u64 unsigned long long int;
 
 operators:
 	i aint gonna do this, we know em
@@ -220,10 +224,26 @@ pointers
 		to get the address of a item you use &var
 		to get the value at the address addr use *addr (this is the later on i ment)
 		you can also add and subtract to move around
+	
+	dynamic arrays
+		you can set a pointer to the first adress of a block of memory with constant but decided at runtime length such as
+		int* ptr;
+		ptr = new int[length]; //this is the same as 
+		ptr = &((new int[length])[0]); //this
 
 	pointers can be null, beware of such
 	you can also point to a pointer and so on, but avoid having a pointer where you have to go through 4 pointers to get to a value, cos thats bad code
 	and you should reconsider how you are handling that problem
+
+	to get a feild of an objedct in a pointer without getting the value in the memory directly use ptr->feild;
+
+referances
+	referances are values that have the same address in memory as another value
+	declaring:
+		referance of type T name reffr
+		T& reffr = variable;
+	
+	these are very useful for passing variables and returning them to functions
 
 strings
 	strings are arrays of chars, meaning you cannot easily change their length and this is a bit awkward
@@ -237,4 +257,88 @@ strings
 		strchr(s1,ch) -> returns a pointer to the first occurance of char ch in string s1
 		strstr(s1,s2) -> returns a pointer to the first occurance of string s2 in s1
 
+datetime
+	this is in the <ctime> library
+	time is stored as 4 types/structs
+		clock_t
+		time_t
+		size_t
+		tm
 
+	there are 4 methods
+		time_t time(time_t *time) -> returns unix time
+		char* ctime(time_t* time) -> returns pointer to string of the form "day month year hours:minutes:seconds year\n\0"
+		tm* localtime(time_t* time) -> returns pointer to tm representing local time
+		clock_t clock() -> returns amount of time the program has been running
+		char* asctime(tm* time) -> returns pointer to string containg data in the structure in the form "day month date hours:minutes:seconds year\n\0"
+		tm* gmtime(time_t* time) -> returns pointer to gmt in form of tm
+		time_t mktime(tm* time) -> returns calender-time equivalent of time pointed to by time
+		double difftime(time_t t1,time_t t2) -> returns differance in seconds between t1 and t2
+		size_t strftime() -> formats time in a specific format
+
+	examples
+		current time
+			time_t now = time(0); //time based on system
+			char* dt = ctime(&now); // time in string form
+			tm *gmtm = gmtime(&now); // convert to tm struct
+			dt =  asctime(gmtm); //time in string form
+		seperating it up
+			time_t now = time(0);
+			cout<<now<<endl;
+			tm* ltm = localtime(&now);
+			cout << "Year:" << 1900 + ltm->tm_year<<endl;
+			cout << "Month: "<< 1 + ltm->tm_mon<< endl;
+			cout << "Day: "<< ltm->tm_mday << endl;
+			cout << "Time: "<< 5+ltm->tm_hour << ":";
+			cout << 30+ltm->tm_min << ":";
+			cout << ltm->tm_sec << endl;
+	
+I/O
+	there are 3 modules needed <iosteam> <iomanip> <fstream>
+		<iostream> -> cin, cout, cerr, clog
+		<iomanip> -> parameterized steam manipulators
+		<fstream> -> file processing
+	
+	iostream methods
+		cin>> value; -> puts user input to predefined value variable
+		cout << value; -> prints value
+		cerr << errormsg<<endl; -> prints error message (unbuffered)
+		clog << logtext<<endl; -> prints log message (buffered)
+
+structs
+	declared with:
+		struct name{
+			type feild;
+			type feild;
+			...
+		};
+		eg for a book
+		struct Books{
+			char title[50];
+			char author[50];
+			char subject[10];
+			int id;
+		};
+
+	instantation:
+		done in one of two ways
+		struct Books book1{"hichhikers guide","douglass","sci/fi",1};
+		or 
+		struct Books book2;
+		strcpy(book2.title,"lord of the rings");
+		strcpy(book2.author,"JRR tolkein");
+		strcpy(book2.subject,"fantasy");
+		book2.id = 2;
+
+	sturcts can be easily passed as arguments ie
+	int printBook(struct Books book);
+
+	pointers work too ie 
+	struct Books* ptr = &book1;
+
+	also insted of using struct everytime you make an object, declare the struct with typedef
+	typedef struct{
+		//feilds
+	} Books;
+
+	so you can make objects with "Books book1;"
