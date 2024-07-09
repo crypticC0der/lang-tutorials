@@ -111,7 +111,7 @@ define,typedef and const
 	typedef u64 unsigned long long int;
 
 operators
-	i aint gonna do this, we know em
+	i aint gonna do this fully, we all know em, if you dont know em and are tryna do c++, learn another language first
 	you got arithmetic operators, comparitive operators and bitwise operators
 	bitwise (just to cover it)
 		& - bitwise and
@@ -120,9 +120,10 @@ operators
 		~ - bitwise 2s compiment
 		<< - left shift
 		>> - right shift
-	you also have the incremental operators
+	you also have the incremental operators, which should be in every language but for some dumb reason arent
 		x++ and x--
 		you also have ++x and --x
+		despite how it seems x++ and ++x are different, same for --x and x--
 		x++ doesnt just add, it also returns x before the calculation
 		++x does the oposite it adds then returns
 		same goes for the --x and x-- signs
