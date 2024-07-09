@@ -52,7 +52,7 @@ variables
 		
 		you can also put signed or unsigned infront of a value to say that it is signed or unsigned
 
-		qualifiers:
+		qualifiers
 			like modifers such as long, short, signed and unsigned but deal with access and variable saftey
 			const - cannot be changed after being set
 			volatile - can be changed in ways the program cannot see ie by other programs
@@ -60,11 +60,11 @@ variables
 			register - stored in a register not ram (RARELY USE THIS IT IS UNSTABLE)
 			extern - a variable/function that is tored in another function
 
-		enums:
+		enums
 			enums are a way of showing types that arent in cpp, such as color (it is in but this is an example shut up)
 			enum color {red,green,blue}; this allows you to select a color from that list, and it makes code more readable than using ints
 
-	declaration:
+	declaration
 		type variable = value;
 		ie: int i =0; or int i{0};
 		to give multiple variables a value on instantation that is different use the 2nd approach
@@ -78,11 +78,11 @@ variables
 		so i=7; sets the memory bits of i to 7, this is why you cant do shit like this
 		10=20;
 
-	scope:
+	scope
 		if a global variable has the same name as a local variable and that varibale is used, it will use the closer one (the local one)
 		to put a variable in global scope you just declare it outside of any function
 	
-literals:
+literals
 	cpp is nice with types in literals but be careful just in case
 	512 is 512 in base 10 form
 	0xFF is 255 and the 0x means the integer is being given in hex
@@ -110,7 +110,7 @@ define,typedef and const
 	tpyedef u8 unsigned char;
 	typedef u64 unsigned long long int;
 
-operators:
+operators
 	i aint gonna do this, we know em
 	you got arithmetic operators, comparitive operators and bitwise operators
 	bitwise (just to cover it)
@@ -165,7 +165,7 @@ conditions
 	if any value from 2 to 11 and not 5 or 10 it will print "this is a cool number"
 	if its none of them it will print the default condition that happens if the switch hasnt been broken out of yet "not supported"
 	
-functions:
+functions
 	declare them with
 	return_type name(paramiters){
 		//body
@@ -186,7 +186,7 @@ functions:
 	you can pass pointers to directly affect the values, this is the only way you can pass/effect/return arrays using c++
 	or pass by referance meaning you dont need to turn the value into a pointer before passing
 
-	inline:
+	inline
 		this is a modifier to the function that when the thing is an alias it will replace the call with the body of the function
 		eg 
 		inline int Max(int x ,int y){
@@ -194,8 +194,8 @@ functions:
 		}
 		cout << Max(20,10) <<endl; //this will be read as cout << (20>10)?20:10 << endl;
 
-numbers again:
-	math operations: (you need <cmath> for these)
+numbers
+	math operations (you need <cmath> for these)
 		double cos(double radian)
 		double sin(double radian)
 		double tan(double radian)
@@ -207,7 +207,7 @@ numbers again:
 		double fabs(double) (floating point abs = fabs)
 		double floor(double) returns floored double
 
-	random numbers:
+	random numbers
 		needs both <ctime> <cstdlib>
 		srand((unsigned)time(null)); //sets seed to the time rn
 		cout << rand() //prints random integer
