@@ -8,5 +8,5 @@ i am going to do this for langauges as i need to, and i have  anumber of things 
 - cover some tensorflow (i may skip covering python cos i know it well)
 - **the thing that this leads up to, format all the documents to a specific so its easily searchable with commands such as**
 <br>  `langhelp cpp math` -> displays subtopics of module math in file cpp or if there arent subtopics show the body of it
-<br>
+
 **note these tutorials are made for my eyes so they have referances to past work, ie my introduction to proper coding through C#, they will probably work well for others but its more fun and a better learnign experiance to write your own**<br>
